@@ -69,7 +69,23 @@ const translations = {
     ocrMatched: "OCR Matched",
     ocrMismatch: "Mismatch — Review",
     noPendingMembers: "No pending member registrations.",
-    noPendingReceipts: "No pending receipts to review.",
+    noPendingReceipts: "No pending receipts to review.", 
+
+    // Timeline section
+    processTitle: "How the savings system works",
+    processEyebrow: "The process",
+    step1Title: "Register as a member",
+    step1Text: "Submit your details and NID for admin verification.",
+    step2Title: "Get approved",
+    step2Text: "The committee reviews and approves your membership.",
+    step3Title: "Deposit monthly",
+    step3Text: "Pay your fixed monthly contribution to the society account.",
+    step4Title: "Upload your receipt",
+    step4Text: "Submit a photo of the bank receipt through your dashboard.",
+    step5Title: "Automatic verification",
+    step5Text: "OCR reads the receipt and checks it against your submission.",
+    step6Title: "Track your savings",
+    step6Text: "Watch your passbook grow, month after month, year after year.",
   },
   bn: {
     home: "হোম",
@@ -142,6 +158,23 @@ const translations = {
     ocrMismatch: "অমিল — পর্যালোচনা প্রয়োজন",
     noPendingMembers: "কোনো মুলতুবি সদস্য নিবন্ধন নেই।",
     noPendingReceipts: "পর্যালোচনার জন্য কোনো মুলতুবি রশিদ নেই।",
+
+
+    // Timeline section
+    processTitle: "সঞ্চয় ব্যবস্থা কিভাবে কাজ করে",
+    processEyebrow: "প্রক্রিয়া",
+    step1Title: "সদস্য হিসেবে নিবন্ধন করুন",
+    step1Text: "অ্যাডমিন যাচাইয়ের জন্য আপনার তথ্য ও এনআইডি জমা দিন।",
+    step2Title: "অনুমোদন পান",
+    step2Text: "কমিটি আপনার আবেদন পর্যালোচনা করে অনুমোদন দেবে।",
+    step3Title: "মাসিক জমা দিন",
+    step3Text: "সমিতির অ্যাকাউন্টে আপনার নির্ধারিত মাসিক চাঁদা পরিশোধ করুন।",
+    step4Title: "রশিদ আপলোড করুন",
+    step4Text: "আপনার ড্যাশবোর্ডের মাধ্যমে ব্যাংক রশিদের ছবি জমা দিন।",
+    step5Title: "স্বয়ংক্রিয় যাচাই",
+    step5Text: "ওসিআর রশিদ পড়ে আপনার জমা দেওয়া তথ্যের সাথে মিলিয়ে দেখে।",
+    step6Title: "আপনার সঞ্চয় ট্র্যাক করুন",
+    step6Text: "প্রতি মাসে, প্রতি বছরে আপনার পাসবুক বাড়তে দেখুন।",
   },
 };
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX, FiGlobe } from "react-icons/fi";
-import Seal from "../common/Seal";
+import logo from "../../assets/logo.jpg";
 import Button from "../common/Button";
 import { useAuth } from "../../context/AuthContext";
 import { useLanguage } from "../../context/LanguageContext";
@@ -35,12 +35,12 @@ export default function Navbar() {
     >
       <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between h-20">
         <Link to="/" className="flex items-center gap-3">
-          <Seal size={40} label="MSM" spin={false} tone="forest" />
-          <div className="leading-tight">
-            <div className="font-display font-semibold text-lg text-forest">MASAIMI</div>
-            <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-ink/50">Savings Society</div>
-          </div>
-        </Link>
+  <img src={logo} alt="MASAIMI Logo" className="h-10 w-auto object-contain" />
+  <div className="leading-tight">
+    <div className="font-display font-semibold text-lg text-forest">MASAIMI</div>
+    <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-ink/50">Savings Society</div>
+  </div>
+</Link>
 
         <div className="hidden lg:flex items-center gap-8">
           {links.map((l) => (
