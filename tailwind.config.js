@@ -21,6 +21,12 @@ module.exports = {
         body: ["'Plus Jakarta Sans'", "sans-serif"],
         mono: ["'IBM Plex Mono'", "monospace"],
       },
+      fontFamily: {
+  display: ["Fraunces", "serif"],
+  body: ["'Plus Jakarta Sans'", "sans-serif"],
+  mono: ["'IBM Plex Mono'", "monospace"],
+  bengali: ["'Hind Siliguri'", "sans-serif"],
+},
     },
   },
   plugins: [],

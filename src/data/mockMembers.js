@@ -1,27 +1,22 @@
-// Mirrors the shape of the future MongoDB "User" model.
-// Fields: name, bankName, profilePicture, lastDepositDate, lastDepositAmount, status
-
-const names = [
-  "Rafiqul Islam", "Nasrin Akter", "Shahidul Haque", "Fatema Begum",
-  "Abdul Karim", "Salma Khatun", "Kamal Hossain", "Ruma Akter",
-  "Delwar Hossain", "Jesmin Sultana", "Mizanur Rahman", "Shirin Aktar",
-  "Anwar Hossain", "Taslima Begum", "Rezaul Karim", "Nargis Akter",
-  "Habibur Rahman", "Shahana Begum", "Jahangir Alam", "Rokeya Begum",
+export const mockMembers = [
+  { id: "M-1001", name: "MD MIZANUR RAHMAN MINHAZ", bankName: "" },
+  { id: "M-1002", name: "MD ABU SALEH", bankName: "" },
+  { id: "M-1003", name: "ABU SUFIYAN", bankName: "" },
+  { id: "M-1004", name: "ATIKUR RAHMAN", bankName: "" },
+  { id: "M-1005", name: "IMRAN HOSSEN", bankName: "" },
+  { id: "M-1006", name: "KHURRAM MURAD ABDULLAH", bankName: "" },
+  { id: "M-1007", name: "MD ISMAIL", bankName: "" },
+  { id: "M-1008", name: "ABDUR ROB", bankName: "" },
+  { id: "M-1009", name: "MD JAHIRUL ISLAM", bankName: "" },
+  { id: "M-1010", name: "IMRAN KHAN", bankName: "" },
+  { id: "M-1011", name: "LOKMAN HOSSEN", bankName: "" },
+  { id: "M-1012", name: "SIFATUL ISLAM", bankName: "" },
+  { id: "M-1013", name: "MOINUDDIN", bankName: "" },
+  { id: "M-1014", name: "SAIFUL ISLAM", bankName: "" },
+  { id: "M-1015", name: "MD SALIM", bankName: "" },
+  { id: "M-1016", name: "MD ARAFAT HOSSAIN", bankName: "" },
+  { id: "M-1017", name: "MASUD ALAM", bankName: "" },
+  { id: "M-1018", name: "SHARIFUL ISLAM", bankName: "" },
+  { id: "M-1019", name: "FAIZ ABDULLAH", bankName: "" },
+  { id: "M-1020", name: "ABDULLA AL MASUD", bankName: "" },
 ];
-
-const banks = [
-  "Dutch-Bangla Bank", "Islami Bank Bangladesh", "Sonali Bank",
-  "BRAC Bank", "City Bank", "Agrani Bank",
-];
-
-const statuses = ["approved", "pending", "approved", "approved"];
-
-export const mockMembers = names.map((name, i) => ({
-  id: `M-${1041 + i}`,
-  name,
-  bankName: banks[i % banks.length],
-  profilePicture: null, // will hold Cloudinary URL later
-  lastDepositDate: `2026-0${(i % 6) + 1}-${10 + (i % 15)}`,
-  lastDepositAmount: 3000,
-  status: statuses[i % statuses.length],
-}));

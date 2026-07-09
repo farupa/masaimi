@@ -13,7 +13,7 @@ export default function Members() {
 
   return (
     <div className="bg-cream min-h-screen py-12">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-4xl mx-auto px-6">
         <div className="mb-8">
           <p className="font-mono text-xs tracking-[0.2em] uppercase text-gold-dark font-medium">
             Public directory
@@ -32,39 +32,25 @@ export default function Members() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-md overflow-x-auto">
-          <table className="w-full text-sm min-w-[720px]">
+          <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-xs uppercase tracking-wider text-ink/40 border-b border-forest/10">
                 <th className="p-4 font-medium">Photo</th>
                 <th className="p-4 font-medium">Name</th>
                 <th className="p-4 font-medium">Bank</th>
-                <th className="p-4 font-medium">Last Deposit Date</th>
-                <th className="p-4 font-medium">Amount</th>
-                <th className="p-4 font-medium">Status</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((m) => (
                 <tr key={m.id} className="border-b border-forest/5 last:border-0 hover:bg-sage/40">
                   <td className="p-4">
-                    <div className="h-10 w-10 rounded-full bg-forest/10 text-forest flex items-center justify-center font-display">
+                    <div className="h-10 w-10 rounded-full bg-forest/10 text-forest flex items-center justify-center font-display text-sm font-semibold">
                       {m.name.charAt(0)}
                     </div>
                   </td>
                   <td className="p-4 font-medium text-ink/80">{m.name}</td>
-                  <td className="p-4 text-ink/60">{m.bankName}</td>
-                  <td className="p-4 font-mono text-xs text-ink/60">{m.lastDepositDate}</td>
-                  <td className="p-4 font-mono">৳{m.lastDepositAmount.toLocaleString()}</td>
-                  <td className="p-4">
-                    <span
-                      className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
-                        m.status === "approved"
-                          ? "bg-emerald/10 text-emerald"
-                          : "bg-gold/10 text-gold-dark"
-                      }`}
-                    >
-                      {m.status === "approved" ? "Paid Up" : "Pending"}
-                    </span>
+                  <td className="p-4 text-ink/40 text-xs italic">
+                    {m.bankName || "—"}
                   </td>
                 </tr>
               ))}
@@ -73,7 +59,7 @@ export default function Members() {
         </div>
 
         {filtered.length === 0 && (
-          <p className="text-center text-ink/40 mt-10">No members match your search.</p>
+          <p className="text-center text-ink/40 mt-10">No members found.</p>
         )}
       </div>
     </div>

@@ -4,8 +4,10 @@ import { FiArrowRight } from "react-icons/fi";
 import Button from "../common/Button";
 import Seal from "../common/Seal";
 import StatCard from "../common/StatCard";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function Hero() {
+  const { lang } = useLanguage();
   return (
     <section className="relative overflow-hidden bg-forest-900">
       <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-gold/10 blur-3xl" />
@@ -29,8 +31,15 @@ export default function Hero() {
               transition={{ duration: 0.7, delay: 0.1 }}
               className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.08] text-cream"
             >
-              Every deposit, <span className="italic text-gold-light">stamped</span>,
-              <br className="hidden sm:block" /> verified and remembered.
+              {lang === "bn" ? (
+                <span className="block font-bengali leading-tight text-cream/95">
+                  সঞ্চয়ে শৃঙ্খলা, <span className="italic text-gold-light">আত্মবিশ্বাসে</span> অগ্রযাত্রা।
+                </span>
+              ) : (
+                <span className="block leading-tight text-cream/95">
+                  Discipline in saving, confidence in every step.
+                </span>
+              )}
             </motion.h1>
 
             <motion.p
