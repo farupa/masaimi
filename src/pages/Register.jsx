@@ -2,18 +2,53 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Button from "../components/common/Button";
-import Field from "../components/common/Field";
 import Seal from "../components/common/Seal";
+import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
+import { FiAlertCircle } from "react-icons/fi";
 
 export default function Register() {
   const { t } = useLanguage();
+  const { register } = useAuth();
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    bankName: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: POST form data to /api/auth/register (multipart, with profile photo)
-    setSubmitted(true);
+    setError("");
+
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await register({
+        name: form.name,
+        phone: form.phone,
+        bankName: form.bankName,
+        password: form.password,
+      });
+      setSubmitted(true);
+    } catch (err) {
+      setError(err.response?.data?.message || "Registration failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -51,29 +86,81 @@ export default function Register() {
         <h1 className="font-display text-2xl text-center text-forest">{t("registerTitle")}</h1>
         <p className="text-center text-sm text-ink/50 mt-1">{t("registerSubtitle")}</p>
 
-        <div className="mt-8 space-y-5">
-          <Field label={t("fullName")} required placeholder="Rafiqul Islam" />
-          <div className="grid sm:grid-cols-2 gap-5">
-            <Field label={t("phone")} required placeholder="01XXXXXXXXX" />
-            <Field label={t("nidNumber")} required placeholder="1990-XXXX-XXXX" />
+        {error && (
+          <div className="mt-4 flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 rounded-lg px-4 py-3 text-sm">
+            <FiAlertCircle size={16} />
+            {error}
           </div>
-          <Field label={t("bankName")} required placeholder="Dutch-Bangla Bank" />
-          <div className="grid sm:grid-cols-2 gap-5">
-            <Field label={t("passwordLabel")} type="password" required placeholder="••••••••" />
-            <Field label={t("confirmPassword")} type="password" required placeholder="••••••••" />
+        )}
+
+        <div className="mt-8 space-y-5">
+          <div>
+            <label className="text-sm font-medium text-ink/70">{t("fullName")}</label>
+            <input
+              name="name"
+              required
+              value={form.name}
+              onChange={handleChange}
+              placeholder="Your full name"
+              className="mt-1.5 w-full rounded-lg border border-forest/15 px-4 py-3 text-sm focus:border-forest outline-none"
+            />
           </div>
           <div>
-            <label className="text-sm font-medium text-ink/70">Profile Picture</label>
+            <label className="text-sm font-medium text-ink/70">{t("phone")}</label>
             <input
-              type="file"
-              accept="image/*"
-              className="mt-1.5 w-full text-sm text-ink/60 file:mr-4 file:rounded-lg file:border-0 file:bg-forest/10 file:text-forest file:px-4 file:py-2"
+              name="phone"
+              required
+              value={form.phone}
+              onChange={handleChange}
+              placeholder="01XXXXXXXXX"
+              className="mt-1.5 w-full rounded-lg border border-forest/15 px-4 py-3 text-sm focus:border-forest outline-none"
             />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-ink/70">{t("bankName")}</label>
+            <input
+              name="bankName"
+              value={form.bankName}
+              onChange={handleChange}
+              placeholder="Dutch-Bangla Bank"
+              className="mt-1.5 w-full rounded-lg border border-forest/15 px-4 py-3 text-sm focus:border-forest outline-none"
+            />
+          </div>
+          <div className="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label className="text-sm font-medium text-ink/70">{t("passwordLabel")}</label>
+              <input
+                name="password"
+                type="password"
+                required
+                value={form.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                className="mt-1.5 w-full rounded-lg border border-forest/15 px-4 py-3 text-sm focus:border-forest outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-ink/70">{t("confirmPassword")}</label>
+              <input
+                name="confirmPassword"
+                type="password"
+                required
+                value={form.confirmPassword}
+                onChange={handleChange}
+                placeholder="••••••••"
+                className="mt-1.5 w-full rounded-lg border border-forest/15 px-4 py-3 text-sm focus:border-forest outline-none"
+              />
+            </div>
           </div>
         </div>
 
-        <Button type="submit" variant="primary" className="w-full mt-8">
-          {t("submitRegistration")}
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full mt-8"
+          disabled={loading}
+        >
+          {loading ? "Submitting..." : t("submitRegistration")}
         </Button>
 
         <p className="text-center text-sm text-ink/50 mt-6">

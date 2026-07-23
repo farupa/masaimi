@@ -1,26 +1,38 @@
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { FiImage } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import Seal from "../components/common/Seal";
 import StatusBadge from "../components/common/StatusBadge";
-import { myReceipts } from "../data/mockReceipts";
+import API from "../api";
 
 export default function Dashboard() {
   const { user } = useAuth();
   const { t } = useLanguage();
+  const [receipts, setReceipts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [viewImage, setViewImage] = useState(null);
 
-  const totalPaid = myReceipts
+  useEffect(() => {
+    API.get("/receipts/me")
+      .then((res) => setReceipts(res.data))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const totalPaid = receipts
     .filter((r) => r.status === "verified")
-    .reduce((sum, r) => sum + r.amount, 0);
-  const pendingAmount = myReceipts
+    .reduce((sum, r) => sum + r.depositAmount, 0);
+
+  const pendingAmount = receipts
     .filter((r) => r.status === "pending")
-    .reduce((sum, r) => sum + r.amount, 0);
+    .reduce((sum, r) => sum + r.depositAmount, 0);
 
   return (
     <div className="bg-sage min-h-screen py-10">
       <div className="max-w-5xl mx-auto px-6 space-y-8">
-        {/* Profile / welcome card */}
+        {/* Welcome card */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -34,9 +46,7 @@ export default function Dashboard() {
             <div className="flex-1">
               <p className="font-mono text-xs tracking-[0.2em] uppercase text-gold-light">{t("accountTitle")}</p>
               <h2 className="font-display text-2xl mt-1">{user?.name}</h2>
-              <p className="text-cream/60 text-sm mt-1">
-                NID {user?.nid} · {user?.bank}
-              </p>
+              <p className="text-cream/60 text-sm mt-1">📞 {user?.phone} · 🏦 {user?.bankName || "—"}</p>
             </div>
             <Seal size={64} label="MSM" spin={false} />
           </div>
@@ -57,40 +67,80 @@ export default function Dashboard() {
         <div className="rounded-2xl bg-white border border-forest/10 p-6 shadow-md overflow-x-auto">
           <h3 className="font-display text-lg text-forest mb-5">{t("receiptHistoryTitle")}</h3>
 
-          {myReceipts.length === 0 ? (
+          {loading && <p className="text-sm text-ink/40">Loading...</p>}
+
+          {!loading && receipts.length === 0 && (
             <p className="text-sm text-ink/40">{t("noReceipts")}</p>
-          ) : (
-            <table className="w-full text-sm min-w-[640px]">
-              <thead>
-                <tr className="text-left text-xs uppercase tracking-wider text-ink/40 border-b border-forest/10">
-                  <th className="pb-3 font-medium">Month</th>
-                  <th className="pb-3 font-medium">Transaction ID</th>
-                  <th className="pb-3 font-medium">Date</th>
-                  <th className="pb-3 font-medium">Amount</th>
-                  <th className="pb-3 font-medium">Status</th>
-                  <th className="pb-3 font-medium text-right">Receipt</th>
-                </tr>
-              </thead>
-              <tbody>
-                {myReceipts.map((r) => (
-                  <tr key={r.id} className="border-b border-forest/5 last:border-0">
-                    <td className="py-3.5">{r.month}</td>
-                    <td className="py-3.5 font-mono text-xs text-ink/60">{r.transactionId}</td>
-                    <td className="py-3.5 font-mono text-xs text-ink/60">{r.date}</td>
-                    <td className="py-3.5 font-mono">৳{r.amount.toLocaleString()}</td>
-                    <td className="py-3.5"><StatusBadge status={r.status} /></td>
-                    <td className="py-3.5 text-right">
-                      <button className="text-forest hover:text-gold transition-colors inline-flex items-center gap-1 text-xs font-medium">
-                        <FiImage size={14} /> {t("viewReceipt")}
+          )}
+
+          {!loading && receipts.length > 0 && (
+            <div className="space-y-4">
+              {receipts.map((r) => (
+                <div key={r._id} className="border border-forest/10 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center gap-4">
+                  {/* Receipt image thumbnail */}
+                  <div className="shrink-0">
+                    {r.receiptImage ? (
+                      <button onClick={() => setViewImage(`http://localhost:5000${r.receiptImage}`)}>
+                        <img
+                          src={`http://localhost:5000${r.receiptImage}`}
+                          alt="Receipt"
+                          className="h-16 w-16 object-cover rounded-lg border border-forest/10 hover:opacity-80 transition-opacity"
+                        />
                       </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    ) : (
+                      <div className="h-16 w-16 rounded-lg border border-dashed border-forest/20 flex items-center justify-center">
+                        <FiImage className="text-ink/20" size={20} />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Receipt details */}
+                  <div className="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">
+                    <div>
+                      <div className="text-xs text-ink/40 uppercase">Bank</div>
+                      <div className="text-ink/80 font-medium">{r.bankName}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-ink/40 uppercase">TXN ID</div>
+                      <div className="font-mono text-xs text-ink/60">{r.transactionId}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-ink/40 uppercase">Amount</div>
+                      <div className="font-mono text-ink/80">৳{r.depositAmount.toLocaleString()}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-ink/40 uppercase">Date</div>
+                      <div className="font-mono text-xs text-ink/60">{r.depositDate}</div>
+                    </div>
+                  </div>
+
+                  <div className="shrink-0">
+                    <StatusBadge status={r.status} />
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>
+
+      {/* Full-size image modal */}
+      <AnimatePresence>
+        {viewImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setViewImage(null)}
+            className="fixed inset-0 z-[70] bg-ink/80 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}>
+              <img src={viewImage} alt="Receipt full" className="max-h-[85vh] max-w-[90vw] rounded-2xl shadow-2xl" />
+              <p className="text-center text-cream/60 text-sm mt-3">Click anywhere to close</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

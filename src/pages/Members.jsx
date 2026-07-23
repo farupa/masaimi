@@ -1,13 +1,22 @@
-import { useState } from "react";
-import { mockMembers } from "../data/mockMembers";
+import { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { FiSearch } from "react-icons/fi";
 
 export default function Members() {
+  const [members, setMembers] = useState([]);
   const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(true);
   const { t } = useLanguage();
 
-  const filtered = mockMembers.filter((m) =>
+  useEffect(() => {
+    fetch("http://localhost:5000/api/admin/members/public")
+      .then((res) => res.json())
+      .then((data) => setMembers(data))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filtered = members.filter((m) =>
     m.name.toLowerCase().includes(query.toLowerCase())
   );
 
@@ -31,35 +40,43 @@ export default function Members() {
           />
         </div>
 
-        <div className="bg-white rounded-2xl shadow-md overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-left text-xs uppercase tracking-wider text-ink/40 border-b border-forest/10">
-                <th className="p-4 font-medium">Photo</th>
-                <th className="p-4 font-medium">Name</th>
-                <th className="p-4 font-medium">Bank</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((m) => (
-                <tr key={m.id} className="border-b border-forest/5 last:border-0 hover:bg-sage/40">
-                  <td className="p-4">
-                    <div className="h-10 w-10 rounded-full bg-forest/10 text-forest flex items-center justify-center font-display text-sm font-semibold">
-                      {m.name.charAt(0)}
-                    </div>
-                  </td>
-                  <td className="p-4 font-medium text-ink/80">{m.name}</td>
-                  <td className="p-4 text-ink/40 text-xs italic">
-                    {m.bankName || "—"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {loading && <p className="text-sm text-ink/40">Loading members...</p>}
 
-        {filtered.length === 0 && (
-          <p className="text-center text-ink/40 mt-10">No members found.</p>
+        {!loading && (
+          <div className="bg-white rounded-2xl shadow-md overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-xs uppercase tracking-wider text-ink/40 border-b border-forest/10">
+                  <th className="p-4 font-medium">Photo</th>
+                  <th className="p-4 font-medium">Name</th>
+                  <th className="p-4 font-medium">Phone</th>
+                  <th className="p-4 font-medium">Bank</th>
+                  <th className="p-4 font-medium">Total Deposited</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((m) => (
+                  <tr key={m._id} className="border-b border-forest/5 last:border-0 hover:bg-sage/40">
+                    <td className="p-4">
+                      <div className="h-10 w-10 rounded-full bg-forest/10 text-forest flex items-center justify-center font-display text-sm font-semibold">
+                        {m.name.charAt(0)}
+                      </div>
+                    </td>
+                    <td className="p-4 font-medium text-ink/80">{m.name}</td>
+                    <td className="p-4 text-ink/60 font-mono text-xs">{m.phone}</td>
+                    <td className="p-4 text-ink/60">{m.bankName || "—"}</td>
+                    <td className="p-4 font-mono text-emerald font-semibold">
+                      {m.totalDeposited > 0 ? `৳${m.totalDeposited.toLocaleString()}` : "—"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {filtered.length === 0 && (
+              <p className="text-center text-ink/40 py-10">No members found.</p>
+            )}
+          </div>
         )}
       </div>
     </div>
