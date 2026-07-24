@@ -9,7 +9,7 @@ export default function Members() {
   const { t } = useLanguage();
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/admin/members/public")
+    fetch(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/api/admin/members/public`)
       .then((res) => res.json())
       .then((data) => setMembers(data))
       .catch((err) => console.error(err))

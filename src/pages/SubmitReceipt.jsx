@@ -55,7 +55,7 @@ export default function SubmitReceipt() {
       }
 
       const token = localStorage.getItem("masaimi_token");
-      const res = await fetch("http://localhost:5000/api/receipts", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "https://masaimi-backend.onrender.com"}/api/receipts`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

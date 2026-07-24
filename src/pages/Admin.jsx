@@ -109,9 +109,9 @@ export default function Admin() {
 
                   {/* Receipt image thumbnail */}
                   {r.receiptImage ? (
-                    <button onClick={() => setViewImage(`http://localhost:5000${r.receiptImage}`)} className="shrink-0 group">
+                    <button onClick={() => setViewImage(`${process.env.REACT_APP_API_URL || "https://masaimi-backend.onrender.com"}${r.receiptImage}`)} className="shrink-0 group">
                       <img
-                        src={`http://localhost:5000${r.receiptImage}`}
+                        src={`${process.env.REACT_APP_API_URL || "https://masaimi-backend.onrender.com"}${r.receiptImage}`}
                         alt="Receipt"
                         className="h-20 w-20 object-cover rounded-lg border border-forest/10 group-hover:opacity-80 transition-opacity"
                       />

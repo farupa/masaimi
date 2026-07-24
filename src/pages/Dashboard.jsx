@@ -80,9 +80,9 @@ export default function Dashboard() {
                   {/* Receipt image thumbnail */}
                   <div className="shrink-0">
                     {r.receiptImage ? (
-                      <button onClick={() => setViewImage(`http://localhost:5000${r.receiptImage}`)}>
+                      <button onClick={() => setViewImage(`${process.env.REACT_APP_API_URL || "https://masaimi-backend.onrender.com"}${r.receiptImage}`)}>
                         <img
-                          src={`http://localhost:5000${r.receiptImage}`}
+                          src={`${process.env.REACT_APP_API_URL || "https://masaimi-backend.onrender.com"}${r.receiptImage}`}
                           alt="Receipt"
                           className="h-16 w-16 object-cover rounded-lg border border-forest/10 hover:opacity-80 transition-opacity"
                         />
